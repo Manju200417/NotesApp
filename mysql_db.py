@@ -1,0 +1,47 @@
+import os
+import mysql.connector
+from dotenv import load_dotenv
+from flask import Response
+
+# CREATE TABLE files (
+#     id INT AUTO_INCREMENT PRIMARY KEY,
+#     filename VARCHAR(255) NOT NULL,
+#     filedata LONGBLOB NOT NULL,
+#     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+# );
+
+load_dotenv()
+
+def get_db_connection():
+    conn = mysql.connector.connect(
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
+    )
+    return conn
+
+# Upload_file
+def upload_file(file):
+    if file:
+        filename = file.filename
+        filedata = file.read()
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute( "insert into files (filename, filedata) VALUES (%s, %s)",(filename, filedata))
+        conn.commit()
+
+        file_id = cursor.lastrowid
+        conn.close()
+
+        return {"id": file_id, "filename": filename}
+
+def get_file_from_db(file_id: int):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT filename, filedata FROM files WHERE id=%s", (file_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row  # (filename, filedata) or None

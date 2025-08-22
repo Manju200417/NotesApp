@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Books</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='MG.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #e5e7eb;
+      background: linear-gradient(135deg, #111827, #1f2937, #374151);
+      min-height: 100vh;
+    }
+
+    /* Top navbar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, #0f172a, #1e293b);
+      padding: 10px 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .topbar .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .topbar nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .topbar nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 5px;
+      transition: 0.2s;
+    }
+
+    .topbar nav a:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    .topbar .search-box {
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    .topbar .search-box input {
+      padding: 6px 10px;
+      border-radius: 5px 0 0 5px;
+      border: none;
+      outline: none;
+      width: 150px;
+    }
+
+    .topbar .search-box button {
+      padding: 6px 12px;
+      border: none;
+      background: #10b981;
+      color: white;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .topbar .search-box button:hover {
+      background: #059669;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      padding-top: 70px;
+      gap: 20px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #10b981;
+      padding: 20px;
+      border-radius: 15px;
+      height: calc(100vh - 70px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #10b981;
+    }
+
+    /* Categories */
+    .sidebar .categories {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      gap: 10px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .sidebar .categories li a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      transition: 0.2s;
+    }
+
+    .sidebar .categories li a:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    /* Main content */
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-auto-rows: min-content;
+      gap: 20px;
+    }
+
+    /* Card */
+    .card {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: #e5e7eb;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #111827, #1f2937);
+    }
+
+    .card h4 {
+      color: #3b82f6;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      margin: 4px 0;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #10b981;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      margin-right: 6px;
+    }
+
+    .card a:hover {
+      background: #059669;
+    }
+
+    footer {
+      text-align: center;
+      padding: 12px 0;
+      color: #cbd5e1;
+      background: #1f2937;
+      margin-top: 20px;
+    }
+
+    #err {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4040;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      z-index: 1100;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 10px 0;
+        border-radius: 0;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar .categories {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 10px;
+        gap: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .sidebar .categories li {
+        flex: 0 0 auto;
+      }
+
+      .sidebar .categories::-webkit-scrollbar {
+        display: none;
+      }
+
+      .main-content {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar nav {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+      }
+
+      .topbar .search-box input {
+        width: 120px;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <div class="topbar">
+    <div class="logo">NotesApp</div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/upload">Upload</a>
+      <form class="search-box" action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search notes..." required>
+        <button type="submit">Search</button>
+      </form>
+    </nav>
+  </div>
+
+  <!-- Layout: Sidebar + Main Content -->
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3>Categories</h3>
+      <ul class="categories">
+        <li><a href="/category/dsa">DSA</a></li>
+        <li><a href="/category/daa">DAA</a></li>
+        <li><a href="/category/java">JAVA</a></li>
+        <li><a href="/category/kannada">KANNADA</a></li>
+        <li><a href="/category/python">PYTHON</a></li>
+        <li><a href="/category/ai">AI</a></li>
+        <li><a href="/category/ml">ML</a></li>
+      </ul>
+    </div>
+
+    {% if err %}<p id="err">{{ err }}</p>{% endif %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+      {% for note in notes %}
+      <div class="card">
+        <h4>{{ note[0] }}</h4>
+        <p><strong>Subject:</strong> {{ note[1] }}</p>
+        <p><strong>Uploaded by:</strong> {{ note[2] }}</p>
+        <p>{{ note[3] }}</p>
+        <a href="/preview/{{ note[4] }}">Preview</a>
+        <a href="/download/{{ note[4] }}">Download</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+
+</html>
