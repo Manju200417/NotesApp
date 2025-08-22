@@ -105,4 +105,20 @@ def get_all_files_metadata(category):
     rows = c.fetchall()
     conn.close()
     return rows
-# --------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------user_profile--------------------------------------------------------------------------------------------------
+
+def get_user_profile(user_id):
+    conn = sqlite3.connect("notesapp.db")
+    c = conn.cursor()
+    
+    c.execute("SELECT id, name,username, email, created_at FROM users WHERE id = ?", (user_id,))
+    user = c.fetchone()
+
+    username = user[2]
+
+    c.execute("SELECT COUNT(*) from files_metadata where uploaded_by = ?", (username,))
+    notes_count = c.fetchone()[0]
+
+    conn.close()
+
+    return user, notes_count

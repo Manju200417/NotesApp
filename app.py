@@ -1,5 +1,5 @@
 from flask import Flask,render_template,session,request,redirect,url_for,Response
-from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata
+from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata,get_user_profile
 from mysql_db import upload_file,get_file_from_db
 from auth import auth_bp
 import base64
@@ -45,7 +45,7 @@ def upload():
                     "branch": request.form.get("branch"),
                     "sem": request.form.get("sem"),
                     "subject": request.form.get("subject"),
-                    "uploaded_by": session.get("name"),
+                    "uploaded_by": session.get("username"),
                     "filename": res.get('filename'),
                     "file_id": res.get('id')
                 }
@@ -132,9 +132,19 @@ def download_file_route(file_id):
         mimetype="application/octet-stream"
     )
 
-@app.route('/profile')
+
+@app.route("/profile")
 def profile():
-    return "User info Page not implemented yet"
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+    
+    user, notes_count = get_user_profile(session["user_id"])
+
+    if not user:
+        return "User not found"
+
+    return render_template("profile.html", user=user, notes_count=notes_count)
 
 if __name__ == "__main__":
     app.run(port=5000,debug=True)
+    

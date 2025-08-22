@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - NotesApp</title>
-    <!-- <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.jpg') }}"> -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='MG.png') }}">
     <style>
         * {
@@ -20,9 +19,7 @@
             color: #e5e7eb;
             min-height: 100vh;
             display: flex;
-            /* make body flex */
             flex-direction: column;
-            /* stack elements vertically */
         }
 
         header {
@@ -244,9 +241,10 @@
         <div class="logo">NotesApp</div>
         <nav>
             <a href="/upload">Upload</a>
-            <a href="/profile">Profile</a>
+            <!-- <a href="/profile">Profile</a> -->
 
             {% if 'username' in session %}
+            <a href="/profile">Profile</a>
             <a href="{{ url_for('auth.logout') }}">Logout</a>
             {% else %}
             <a href="{{ url_for('auth.login') }}">Login</a>
