@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='textbook.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='MG.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="logo">NotesApp</div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/upload">Upload</a>
+      <form class="search-box" action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search notes..." required>
+        <button type="submit">Search</button>
+      </form>
+    </nav>
+  </div>
+
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <h3>Categories</h3>
+      <ul class="categories">
+        <li><a href="/category/dsa">DSA</a></li>
+        <li><a href="/category/daa">DAA</a></li>
+        <li><a href="/category/java">JAVA</a></li>
+        <li><a href="/category/kannada">KANNADA</a></li>
+        <li><a href="/category/python">PYTHON</a></li>
+        <li><a href="/category/ai">AI</a></li>
+        <li><a href="/category/ml">ML</a></li>
+      </ul>
+    </div>
+
+    {% if err %}<p id="err">{{ err }}</p>{% endif %}
+
+    <div class="main-content">
+      {% for note in notes %}
+      <div class="card">
+        <h4>{{ note[0] }}</h4>
+        <p><strong>Subject:</strong> {{ note[1] }}</p>
+        <p><strong>Uploaded by:</strong> {{ note[2] }}</p>
+        <p>{{ note[3] }}</p>
+        <a href="/preview/{{ note[4] }}">Preview</a>
+        <a href="/download/{{ note[4] }}">Download</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+
+</html>

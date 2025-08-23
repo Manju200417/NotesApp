@@ -92,7 +92,6 @@
       text-decoration: underline;
     }
 
-    /* Responsive Design */
     @media (max-width: 500px) {
       .login-container {
         padding: 30px 20px;
@@ -109,7 +108,6 @@
       }
     }
 
-    /* erro and msg style  */
     #msg,
     #err {
       padding: 12px 20px;
@@ -121,14 +119,13 @@
       animation: fadeOut 5s forwards;
     }
 
-    /* Success message */
+
     #msg {
       background-color: #d4edda;
       color: #155724;
       border: 1px solid #c3e6cb;
     }
 
-    /* Error message */
     #err {
       background-color: #f8d7da;
       color: #721c24;
@@ -165,6 +162,7 @@
       <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
+    <p>Login as <a href="{{ url_for('auth.admin_login') }}">Admin</a></p>
   </div>
 </body>
 

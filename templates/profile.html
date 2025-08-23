@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
   <style>
     body {
@@ -21,7 +23,7 @@
       margin-top: 80px;
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       max-width: 400px;
       width: 100%;
       text-align: center;
@@ -30,6 +32,8 @@
     .profile-card img {
       border-radius: 50%;
       margin-bottom: 15px;
+      width: 120px;
+      height: 120px;
     }
 
     .profile-card h2 {
@@ -74,13 +78,43 @@
     .btn-back:hover {
       background: #059669;
     }
+
+    @media (max-width: 600px) {
+      body {
+        align-items: center;
+        padding: 20px;
+      }
+
+      .profile-card {
+        margin-top: 20px;
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .profile-card h2 {
+        font-size: 1.4rem;
+      }
+
+      .profile-card img {
+        width: 90px;
+        height: 90px;
+      }
+
+      .btn-back {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+    }
+  </style>
+
   </style>
 </head>
+
 <body>
 
   <div class="profile-card">
-    <img src="https://ui-avatars.com/api/?name={{ user[1] }}&background=0D8ABC&color=fff&rounded=true&size=120" 
-         alt="User Avatar">
+    <img src="https://ui-avatars.com/api/?name={{ user[1] }}&background=0D8ABC&color=fff&rounded=true&size=120"
+      alt="User Avatar">
     <h2>{{ user[1] }}</h2>
     <p>{{ user[3] }}</p>
 
@@ -95,4 +129,5 @@
   </div>
 
 </body>
+
 </html>

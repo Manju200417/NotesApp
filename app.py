@@ -15,7 +15,7 @@ create_files_table()
 
 @app.before_request
 def require_login():
-    routes_to_avoid = ['dashboard','auth.login','auth.register']
+    routes_to_avoid = ['dashboard','auth.login','auth.register',"auth.admin_login"]
 
     if request.endpoint not in routes_to_avoid and 'user_id' not in session:
         return redirect(url_for('auth.login'))
@@ -67,7 +67,7 @@ def textbooks():
     all_notes = get_all_files_metadata("textbook") 
     if not all_notes:
         err = "No Textbook's Are Available"
-    return render_template("textbook.html",notes=all_notes,err=err)
+    return render_template("pages.html",notes=all_notes,err=err,title = "TextBook's")
 
 @app.route('/notes',methods=['GET', 'POST'])
 def notes():
@@ -75,7 +75,7 @@ def notes():
     all_notes = get_all_files_metadata("notes") 
     if not all_notes:
         err = "No Note's Are Available"
-    return render_template("notes.html",notes=all_notes,err=err)
+    return render_template("pages.html",notes=all_notes,err=err,title = "Note's")
 
 @app.route('/qp',methods=['GET', 'POST'])
 def qp():
@@ -83,7 +83,7 @@ def qp():
     all_notes = get_all_files_metadata("previous_qp") 
     if not all_notes:
         err = "No Qustion Paper's Are Available"
-    return render_template("previous_qp.html",notes=all_notes,err=err)
+    return render_template("pages.html",notes=all_notes,err=err,title = "Qustions_Paper's")
 
 @app.route("/preview/<int:file_id>")
 def preview(file_id):
@@ -121,7 +121,6 @@ def preview(file_id):
         filedata=filedata
     )
 
-
 @app.route("/download/<int:file_id>")
 def download_file_route(file_id):
     row = get_file_from_db(file_id)
@@ -131,7 +130,6 @@ def download_file_route(file_id):
         headers={"Content-Disposition": f"attachment; filename={filename}"},
         mimetype="application/octet-stream"
     )
-
 
 @app.route("/profile")
 def profile():
@@ -147,4 +145,3 @@ def profile():
 
 if __name__ == "__main__":
     app.run(port=5000,debug=True)
-    

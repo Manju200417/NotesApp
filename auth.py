@@ -4,6 +4,10 @@ from db import create_user_table,insert_user,check_login
 auth_bp = Blueprint('auth', __name__,url_prefix='/auth')
 create_user_table()
 
+@auth_bp.route('/admin_login',methods=['GET', 'POST'])
+def admin_login():
+    return render_template('auth_file/admin_login.html')
+
 @auth_bp.route('/login',methods=['GET', 'POST'])
 def login():
     try:
