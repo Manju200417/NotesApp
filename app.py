@@ -2,6 +2,7 @@ from flask import Flask,render_template,session,request,redirect,url_for,Respons
 from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata,get_user_profile
 from mysql_db import upload_file,get_file_from_db
 from auth import auth_bp
+from admin import admin_bp
 import base64
 
 # -----------------------------------------------------
@@ -10,12 +11,16 @@ app = Flask(__name__)
 app.secret_key = "qw3ia76ew78ystdnicfnsemo89qw3u095r39827wo8y&^$&ruTIYWO7839YNE4987"
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(admin_bp)
 
 create_files_table()
 
 @app.before_request
 def require_login():
-    routes_to_avoid = ['dashboard','auth.login','auth.register',"auth.admin_login"]
+    if request.blueprint == 'admin':  
+        return 
+    # routes_to_avoid = ['dashboard','auth.login','auth.register',"auth.admin_login","admin.users","admin.files"]
+    routes_to_avoid = ['dashboard','auth.login','auth.register','auth.logout','admin.admin_login','static']
 
     if request.endpoint not in routes_to_avoid and 'user_id' not in session:
         return redirect(url_for('auth.login'))

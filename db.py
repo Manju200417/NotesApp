@@ -10,8 +10,8 @@ def create_user_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             username TEXT NOT NULL UNIQUE,
-            email TEXT NOT NULL,
-            password TEXT NOT NULL,
+            email TEXT,
+            password TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
