@@ -14,9 +14,9 @@ def Admin():
 
     db = sqlite3.connect("notesapp.db")
     c = db.cursor()
-    c.execute('''insert into users (id,username,password ) values (?, ?, ?) 
+    c.execute('''insert into users (id,username,password,is_admin ) values (?, ?, ?, ?) 
     ON CONFLICT(id) DO UPDATE SET username = excluded.username,password = excluded.password''', 
-    (1, username, password))
+    (1, username, password,True))
     db.commit()
     db.close()
 Admin()

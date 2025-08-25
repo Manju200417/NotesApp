@@ -12,6 +12,7 @@ def create_user_table():
             username TEXT NOT NULL UNIQUE,
             email TEXT,
             password TEXT,
+            is_admin BOOLEAN DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')

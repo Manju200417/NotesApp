@@ -256,10 +256,6 @@
         <h1>Welcome, {{ session.get('name', 'Guest') }}</h1>
         <p>Access notes, textbooks, and previous question papers easily.</p>
 
-        {% if msg %}<p id="msg">{{ msg }}</p>{% endif %}
-        {% if err %}<p id="err">{{ err }}</p>{% endif %}
-
-
     </section>
 
     <section class="categories">
