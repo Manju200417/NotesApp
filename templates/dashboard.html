@@ -96,6 +96,7 @@
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             padding: 40px 20px 100px 20px;
+            margin-bottom: 21px;
         }
 
         .category-card {
@@ -232,6 +233,61 @@
                 font-size: 0.85rem;
             }
         }
+
+        #contact {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            /* dark theme gradient */
+            color: #e5e7eb;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid #10b981;
+            /* green accent line */
+            margin-top: auto;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+        }
+
+        #contact h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #10b981;
+            /* accent green */
+            letter-spacing: 1px;
+        }
+
+        .social-media-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 35px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .social-media-icons a {
+            background-color: #1f2937;
+            padding: 12px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 0 6px transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-media-icons a:hover {
+            transform: scale(1.15);
+            border-color: #10b981;
+            box-shadow: 0 0 15px 3px rgba(16, 185, 129, 0.6);
+            /* green glow */
+        }
+
+        .social-media-icons a img {
+            width: 22px;
+            height: 22px;
+            filter: invert(100%);
+        }
     </style>
 </head>
 
@@ -275,10 +331,18 @@
             <a href="/qp">Explore</a>
         </div>
     </section>
-
-    <footer>
-        &copy; 2025 NotesApp | Contact: support@notesapp.com
-    </footer>
+    <div id="contact">
+        <h2>Follow Me</h2>
+        <div class="social-media-icons">
+            <a href="https://github.com/Manju200417" target="_blank"><img
+                    src="{{ url_for('static', filename='img/github.svg') }}" alt="Github"></a>
+            <a href="https://www.linkedin.com/in/manju-alagawadi-483508243/" target="_blank"><img
+                    src="{{ url_for('static', filename='img/linkedin.svg') }}" alt="Linkedin"></a>
+            <a href="mailto:manjuguru814@gmail.com" target="_blank"><img
+                    src="{{ url_for('static', filename='img/email.svg') }}" alt="Email"></a>
+            <a href="https://www.instagram.com/manju_200417/" target="_blank"><img
+                    src="{{ url_for('static', filename='img/inst.svg') }}" alt="Instagram"></a>
+        </div>
 
 </body>
 

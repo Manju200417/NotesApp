@@ -34,7 +34,6 @@ def login():
 @auth_bp.route('/register',methods=['GET', 'POST'])
 def register():
     try:
-        print("register route " )
         err = ''
         if request.method == 'POST':
             user = {
@@ -44,8 +43,6 @@ def register():
                 "password": request.form.get('password'),
                 "confirm_password": request.form.get('confirm_password')
             }
-            
-            print(user['username'],user['password'])
 
             if user.get("password") != user.get("confirm_password"):
                 err = "Passwords do not match!"
