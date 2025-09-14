@@ -63,7 +63,6 @@ def upload():
                 err = f"Upload failed: {str(e)}"
         else:
             err = "No file selected!"
-    print(err)
 
     return render_template("upload.html", msg=msg, err=err)
 
