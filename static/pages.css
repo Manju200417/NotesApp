@@ -11,6 +11,10 @@ body {
     min-height: 100vh;
 }
 
+a {
+    text-decoration: none;
+}
+
 .topbar {
     position: fixed;
     top: 0;

@@ -23,6 +23,10 @@
             flex-direction: column;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         header {
             position: fixed;
             top: 0;
@@ -146,7 +150,6 @@
         .hero,
         .categories {
             flex: 1 0 auto;
-            /* allow content to grow, so footer is pushed down */
         }
 
 
@@ -156,7 +159,6 @@
             background: #1f2937;
             color: #cbd5e1;
             margin-top: auto;
-            /* pushes footer to bottom if content is short */
         }
 
 
@@ -237,12 +239,10 @@
 
         #contact {
             background: linear-gradient(135deg, #1f2937, #111827);
-            /* dark theme gradient */
             color: #e5e7eb;
             padding: 40px 20px;
             text-align: center;
             border-top: 2px solid #10b981;
-            /* green accent line */
             margin-top: auto;
             border-radius: 20px 20px 0 0;
             width: 100%;
@@ -252,7 +252,6 @@
             font-size: 28px;
             margin-bottom: 30px;
             color: #10b981;
-            /* accent green */
             letter-spacing: 1px;
         }
 
@@ -281,7 +280,6 @@
             transform: scale(1.15);
             border-color: #10b981;
             box-shadow: 0 0 15px 3px rgba(16, 185, 129, 0.6);
-            /* green glow */
         }
 
         .social-media-icons a img {
@@ -295,7 +293,9 @@
 <body>
 
     <header>
-        <div class="logo">NotesApp</div>
+        <a href="/">
+            <div class="logo">NotesApp</div>
+        </a>
         <nav>
             <a href="/upload">Upload</a>
 

@@ -63,8 +63,10 @@ def upload():
                 err = f"Upload failed: {str(e)}"
         else:
             err = "No file selected!"
+    print(err)
 
     return render_template("upload.html", msg=msg, err=err)
+
 
 @app.route('/textbooks',methods=['GET', 'POST'])
 def textbooks():
@@ -92,39 +94,45 @@ def qp():
 
 @app.route("/preview/<int:file_id>")
 def preview(file_id):
-    row = get_file_from_db(file_id)
+    try:
+        row = get_file_from_db(file_id)
 
-    if not row:
-        return render_template("preview.html", error="File not found")
-    
-    filename = row[0].lower()
-    filedata = row[1]
+        if not row:
+            return render_template("preview.html", error="File not found")
+        
+        filename = row[0].lower()
+        filedata = row[1]
 
-    # check file type
-    if filename.endswith(".pdf"):
-        is_supported = True
-        filetype = "application/pdf"
-    elif filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
-        is_supported = True
-        filetype = "image/jpeg"
-    elif filename.endswith(".txt"):
-        is_supported = True
-        filetype = "text/plain"
-        filedata = filedata.decode("utf-8")
-    else:
-        is_supported = False
-        filetype = None
+        # check file type
+        if filename.endswith(".pdf"):
+            is_supported = True
+            filetype = "application/pdf"
+        elif filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
+            is_supported = True
+            filetype = "image/jpeg"
+        elif filename.endswith(".txt"):
+            is_supported = True
+            filetype = "text/plain"
+            filedata = filedata.decode("utf-8")
+        else:
+            is_supported = False
+            filetype = None
+            err = "Preview not supported for this file type."
 
-    if is_supported and filetype != "text/plain":
-        filedata = base64.b64encode(filedata).decode('utf-8')
+        if is_supported and filetype != "text/plain":
+            filedata = base64.b64encode(filedata).decode('utf-8')
 
-    return render_template(
-        "preview.html",
-        filename=row[0],
-        preview_supported=is_supported,
-        filetype=filetype,
-        filedata=filedata
-    )
+        return render_template(
+            "preview.html",
+            filename=row[0],
+            preview_supported=is_supported,
+            filetype=filetype,
+            filedata=filedata,
+            error=err if not is_supported else None
+        )
+    except Exception as e:
+        return render_template("preview.html", error="Can't connect to MySQL server")
+
 
 @app.route("/download/<int:file_id>")
 def download_file_route(file_id):

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
-  <title>Preview - {{ filename }}</title>
+  <title>Preview {{ filename }}</title>
   <style>
     * {
       margin: 0;
@@ -143,16 +143,17 @@
   <div class="content">
     {% if preview_supported %}
     {% if filetype == "text/plain" %}
-    <pre>{{ filedata | safe}}</pre>
+    <pre>{{ filedata | safe }}</pre>
     {% else %}
     <iframe src="data:{{ filetype }};base64,{{ filedata }}"></iframe>
     {% endif %}
     {% else %}
     <div class="error">
-      Preview not supported for this file type.
+      {{ error }}
     </div>
     {% endif %}
   </div>
+
 
   <div class="footer">
     &copy; 2025 NotesApp

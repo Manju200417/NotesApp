@@ -93,8 +93,9 @@ def insert_file_metadata(file_data):
     conn.close()
 
 
+# retrive files_metadata
 
-def get_all_files_metadata(category):
+def get_all_files_metadata(type):
     conn = sqlite3.connect("notesapp.db")
     c = conn.cursor()
     c.execute("""
@@ -102,7 +103,7 @@ def get_all_files_metadata(category):
         FROM files_metadata
         WHERE category = ?
         ORDER BY uploaded_at DESC
-    """,(category,))
+    """,(type,))
     rows = c.fetchall()
     conn.close()
     return rows
