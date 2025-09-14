@@ -45,6 +45,7 @@
 
     <div class="main-content">
       {% for note in notes %}
+
       <div class="card">
         <h4>{{ note[0] }}</h4>
         <p><strong>Subject:</strong> {{ note[1] }}</p>
@@ -53,6 +54,7 @@
         <a href="/preview/{{ note[4] }}">Preview</a>
         <a href="/download/{{ note[4] }}">Download</a>
       </div>
+
       {% endfor %}
     </div>
   </div>

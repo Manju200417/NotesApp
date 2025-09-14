@@ -9,16 +9,20 @@ admin_bp = Blueprint('admin',__name__,url_prefix='/admin')
 load_dotenv()
 
 def Admin():
-    username = os.getenv("ADMIN_USERNAME")
-    password = os.getenv("ADMIN_PASSWORD")
+    try:
+        username = os.getenv("ADMIN_USERNAME")
+        password = os.getenv("ADMIN_PASSWORD")
 
-    db = sqlite3.connect("notesapp.db")
-    c = db.cursor()
-    c.execute('''insert into users (id,username,password,is_admin ) values (?, ?, ?, ?) 
-    ON CONFLICT(id) DO UPDATE SET username = excluded.username,password = excluded.password''', 
-    (1, username, password,True))
-    db.commit()
-    db.close()
+        db = sqlite3.connect("notesapp.db")
+        c = db.cursor()
+        c.execute('''insert into users (id,username,password,is_admin ) values (?, ?, ?, ?) 
+        ON CONFLICT(id) DO UPDATE SET username = excluded.username,password = excluded.password''', 
+        (1, username, password,True))
+    except Exception as e:
+        print(str(e))
+    finally:
+        db.commit()
+        db.close()
 Admin()
 
 # ------------- Middleware ---------------
@@ -32,20 +36,24 @@ def require_login():
 @admin_bp.route('/admin_login',methods=['GET', 'POST'])
 def admin_login():
     err =''
-    if request.method == "POST":
-        username = request.form.get('username')
-        password = request.form.get('password')
+    try:
+        if request.method == "POST":
+            username = request.form.get('username')
+            password = request.form.get('password')
 
-        with sqlite3.connect("notesapp.db") as db:
-            c = db.cursor()
-            res = c.execute("select * from users where id = ? and username = ? and password =?",(1,username,password)).fetchone()
+            with sqlite3.connect("notesapp.db") as db:
+                c = db.cursor()
+                res = c.execute("select * from users where id = ? and username = ? and password =?",(1,username,password)).fetchone()
 
-        if res:  
-            session['admin'] = True 
-            return redirect(url_for("admin.dashboard"))
-        else:
-            err = "Invalid username or password!"
-    
+            if res:  
+                session['admin'] = True 
+                return redirect(url_for("admin.dashboard"))
+            else:
+                err = "Invalid username or password!"
+    except Exception as e:
+        err = str(e)
+        print(str(e))
+        
     return render_template('admin/admin_login.html',err = err)
 
 @admin_bp.route('/dashboard')

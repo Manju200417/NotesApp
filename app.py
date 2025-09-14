@@ -15,6 +15,7 @@ app.register_blueprint(admin_bp)
 
 create_files_table()
 
+# ------------- Middleware ---------------
 @app.before_request
 def require_login():
     if request.blueprint == 'admin':  
@@ -70,25 +71,41 @@ def upload():
 @app.route('/textbooks',methods=['GET', 'POST'])
 def textbooks():
     err = ''
-    all_notes = get_all_files_metadata("textbook") 
-    if not all_notes:
-        err = "No Textbook's Are Available"
+    try:
+        all_notes = get_all_files_metadata("textbook") 
+        if not all_notes:
+            err = "No Textbook's Are Available"
+    except Exception as e:
+        err = str(e)
+        print(str(e))
     return render_template("pages.html",notes=all_notes,err=err,title = "TextBook's")
 
 @app.route('/notes',methods=['GET', 'POST'])
 def notes():
     err = ''
-    all_notes = get_all_files_metadata("notes") 
-    if not all_notes:
-        err = "No Note's Are Available"
+    try:
+        all_notes = get_all_files_metadata("notes") 
+        if not all_notes:
+            err = "No Note's Are Available"
+            
+    except Exception as e:
+        err = str(e)
+        print(str(e))
+
     return render_template("pages.html",notes=all_notes,err=err,title = "Note's")
 
 @app.route('/qp',methods=['GET', 'POST'])
 def qp():
     err = ''
-    all_notes = get_all_files_metadata("previous_qp") 
-    if not all_notes:
-        err = "No Qustion Paper's Are Available"
+    try:
+        all_notes = get_all_files_metadata("previous_qp") 
+        if not all_notes:
+            err = "No Qustion Paper's Are Available"
+
+    except Exception as e:
+        err = str(e)
+        print(str(e))
+
     return render_template("pages.html",notes=all_notes,err=err,title = "Qustions_Paper's")
 
 @app.route("/preview/<int:file_id>")
@@ -129,32 +146,43 @@ def preview(file_id):
             filedata=filedata,
             error=err if not is_supported else None
         )
-    except Exception as e:
+    except Exception:
         return render_template("preview.html", error="Can't connect to MySQL server")
 
 
 @app.route("/download/<int:file_id>")
 def download_file_route(file_id):
-    row = get_file_from_db(file_id)
-    filename, filedata = row
-    return Response(
-        filedata,
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
-        mimetype="application/octet-stream"
-    )
+    try:
+        row = get_file_from_db(file_id)
+        filename, filedata = row
+        return Response(
+            filedata,
+            headers={"Content-Disposition": f"attachment; filename={filename}"},
+            mimetype="application/octet-stream"
+        )
+    except Exception as e:
+        print(str(e))
 
 @app.route("/profile")
 def profile():
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-    
-    user, notes_count = get_user_profile(session["user_id"])
+    try:
+        if "user_id" not in session:
+            return redirect(url_for("auth.login"))
+        
+        user, notes_count = get_user_profile(session["user_id"])
 
-    if not user:
-        return "User not found"
+        if not user:
+            return "User not found"
+    
+    except Exception as e:
+        print(str(e))
 
     return render_template("profile.html", user=user, notes_count=notes_count)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000,debug=True)
-    # app.run(port=5000)
+    try:
+        app.run(host="0.0.0.0",port=5000,debug=True)
+        # app.run(port=5000)
+        
+    except Exception as e:
+        print(str(e))

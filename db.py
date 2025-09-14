@@ -107,7 +107,7 @@ def get_all_files_metadata(type):
     rows = c.fetchall()
     conn.close()
     return rows
-# ------------------------------------------user_profile--------------------------------------------------------------------------------------------------
+# ------------------------------------------user_profile----------------------------------------------------------------
 
 def get_user_profile(user_id):
     conn = sqlite3.connect("notesapp.db")

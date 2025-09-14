@@ -7,7 +7,6 @@ create_user_table()
 @auth_bp.route('/login',methods=['GET', 'POST'])
 def login():
     err = ''
-    msg =''
     try:
         if request.method == 'POST':
             username = request.form['username']

@@ -3,13 +3,6 @@ import mysql.connector
 from dotenv import load_dotenv
 from flask import Response
 
-# CREATE TABLE files (
-#     id INT AUTO_INCREMENT PRIMARY KEY,
-#     filename VARCHAR(255) NOT NULL,
-#     filedata LONGBLOB NOT NULL,
-#     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-# );
-
 load_dotenv()
 
 def get_db_connection():
@@ -44,4 +37,4 @@ def get_file_from_db(file_id: int):
     cursor.execute("SELECT filename, filedata FROM files WHERE id=%s", (file_id,))
     row = cursor.fetchone()
     conn.close()
-    return row  # (filename, filedata) or None
+    return row  # (filename, filedata) else None
