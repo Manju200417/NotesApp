@@ -1,7 +1,6 @@
 import os
 import mysql.connector
 from dotenv import load_dotenv
-from flask import Response
 
 load_dotenv()
 
@@ -13,6 +12,18 @@ def get_db_connection():
         database=os.getenv("DB_NAME")
     )
     return conn
+
+
+# ------------------------------------------------------------------------------
+# MySQL (Backend) table structuer is
+
+# create table files (
+#     id int not null auto_increment primary key,
+#     filename varchar(255) not null,
+#     filedata longblob not null,
+#     uploaded_at timestamp not null default current_timestamp );
+
+# -------------------------------------------------------------------------------
 
 # Upload_file
 def upload_file(file):
