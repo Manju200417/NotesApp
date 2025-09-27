@@ -296,3 +296,4 @@ NotesApp/
 ---
 
 Enjoy seamless note management with NotesApp!
+
