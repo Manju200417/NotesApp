@@ -15,7 +15,7 @@ def get_db_connection():
 
 
 # ------------------------------------------------------------------------------
-# MySQL (Backend) table structuer is
+# MySQL (Backend) table structuer is            its just hint for backend table
 
 # create table files (
 #     id int not null auto_increment primary key,
