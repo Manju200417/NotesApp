@@ -339,9 +339,9 @@ NotesApp/
 |-------------|-------------|
 | <img src="assets/Admin-Login.jpg" width="150"> | <img src="assets/Admin-Files.jpg" width="150"> |
 
-| Admin User List |  |
-|-----------------|--|
-| <img src="assets/Admin-user_list.jpg" width="150"> |  |
+| Admin User List |
+|-----------------|
+| <img src="assets/Admin-user_list.jpg" width="150">
 
 
 ## Future Enhancements
