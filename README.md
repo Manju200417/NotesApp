@@ -13,6 +13,7 @@ NotesApp is a modern, mobile-responsive web application designed for students an
 - [Authentication & Authorization](#authentication--authorization)
 - [Database Design](#database-design)
 - [Technology Stack](#technology-stack)
+- [NotesApp Architecture Overview](#notesapp-architecture-overview)
 - [Project Structure](#project-structure)
 - [How to Run](#how-to-run)
 - [Future Enhancements](#future-enhancements)
@@ -221,15 +222,45 @@ flowchart TD
 
 ## Technology Stack
 
-- **Frontend:** HTML, CSS
+- **Frontend:** HTML, CSS, Jinja
 - **Backend:** Flask (Python)
 - **Databases:** SQLite (user info & metadata), MySQL (file storage)
-
 ---
+### NotesApp Architecture Overview
+```mermaid
 
-## Project Structure
+flowchart TD
+ subgraph FlaskApp["Flask Application"]
+        A["app.py<br>Routing &amp; Middleware"]
+        B["auth.py<br>Authentication &amp; Sessions"]
+        C["files.py<br>Upload / Preview / Download"]
+        D["search.py<br>Search &amp; Filter Notes"]
+        E["admin.py<br>Admin Dashboard"]
+ end
+
+ subgraph SQLiteDB["SQLite Database"]
+        U["Users Table<br>(username, email, password)"]
+        FM["Files_Metadata Table<br>(title, description, category, year, branch, semester, subject, file_ref)"]
+ end
+
+ subgraph MySQLDB["MySQL Database"]
+        FD["Files Table<br>(file_id, file_data)"]
+ end
+
+ Client["Client (Browser/Mobile)<br>HTML / CSS"] -- HTTP Requests --> FlaskApp
+ A --> B & C & D & E
+ B --> U
+ C --> FM & FD
+ D --> FM
+ E --> U & FM & FD
+ FlaskApp -- SQL Queries --> SQLiteDB & MySQLDB
+ Admin["Admin User"] --> E
 
 ```
+
+## Project Structure
+```
+
 NotesApp/
 ├── app.py                  # Main Flask application & routing
 ├── auth.py                 # Authentication blueprint (login, register, logout)

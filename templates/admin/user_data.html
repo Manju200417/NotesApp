@@ -14,6 +14,8 @@
 
     {% if err %}<p>{{err}}</p>{% endif %}
     {% if data %}
+    <p style="text-align: center; font-weight: bold;">Total Users Are: {{ total }}</p>
+
     <table border="3">
         <tr>
             <th>Name</th>
@@ -27,7 +29,7 @@
             <td>{{user[1]}}</td>
             <td>{{user[2]}}</td>
             <td>{{user[3]}}</td>
-            <td>{{user[5]}}</td>
+            <td>{{user[6]}}</td>
             <td>
                 <form method="post" onsubmit="return confirm('Are you sure you want to delete this user?');"
                     style="display:inline;">

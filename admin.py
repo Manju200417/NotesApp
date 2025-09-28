@@ -1,8 +1,7 @@
+from flask import session,redirect,url_for,render_template,request,Blueprint
+from dotenv import load_dotenv
 import sqlite3
 import os
-from flask import session,redirect,url_for
-from flask import render_template,request,Blueprint
-from dotenv import load_dotenv
 
 admin_bp = Blueprint('admin',__name__,url_prefix='/admin') 
 
@@ -32,6 +31,7 @@ def require_login():
     if request.endpoint not in routes_to_avoid and 'admin' not in session:
         return redirect(url_for('admin.admin_login'))
 
+# ----------------------------admin-Login----------------------------------------------------------
 
 @admin_bp.route('/admin_login',methods=['GET', 'POST'])
 def admin_login():
@@ -60,13 +60,17 @@ def admin_login():
 def dashboard():
     return render_template("admin/admin_dashboard.html")
 
+# ----------------------------Users----------------------------------------------------------
+
 @admin_bp.route('/users',methods=['GET','POST'])
 def users():
     err = ''
+    total = 0
     db = sqlite3.connect("notesapp.db")
     c = db.cursor()
     try:
         users_data = c.execute("select * from users").fetchall()
+        total = len(users_data)
 
         id = request.form.get("user_id")
         if id:
@@ -75,6 +79,7 @@ def users():
                 c.execute("delete from users where id = ?",(id,))
                 db.commit()
                 err = "User deletd sussefully !"
+                return redirect(url_for('admin.users'))
                 
             else:
                 err = "Admin user cannot be deleted."
@@ -84,21 +89,25 @@ def users():
     finally:
         db.close()
 
-    return render_template("admin/user_data.html",data = users_data,err = err)
+    return render_template("admin/user_data.html",data = users_data,err = err, total = total)
+# ----------------------------files----------------------------------------------------------
 
 @admin_bp.route('/files',methods=['GET','POST'])
 def files():
     err = ''
+    total = 0
     db = sqlite3.connect("notesapp.db")
     c = db.cursor()
     try:
         files_data = c.execute("select * from files_metadata").fetchall()
+        total = len(files_data)
 
         id = request.form.get("user_id")
         if id :
             c.execute("delete from files_metadata where id = ?",(id,))
             db.commit()
             err = "file deletd sussefully !"
+            return redirect(url_for('admin.files'))
     
     except Exception as e:
         err = f"Error: {e}"
@@ -106,7 +115,9 @@ def files():
     finally:
         db.close()
         
-    return render_template("admin/user_data.html",data = files_data,err = err)
+    return render_template("admin/all_files.html",data = files_data,err = err ,total = total)
+
+# ----------------------------admin-logout----------------------------------------------------------
 
 @admin_bp.route("/logout")
 def admin_logout():
