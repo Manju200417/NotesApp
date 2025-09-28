@@ -317,6 +317,33 @@ NotesApp/
 
 ---
 
+## 📸 Screenshots
+
+| Login | Sign In |
+|-------|---------|
+| <img src="assets/Login.jpg" width="150"> | <img src="assets/Sign-in.jpg" width="150"> |
+
+| Dashboard | Pages |
+|-----------|-------|
+| <img src="assets/Dashboard.jpg" width="150"> | <img src="assets/Pages.jpg" width="150"> |
+
+| Upload | Preview |
+|--------|---------|
+| <img src="assets/Uplode.jpg" width="150"> | <img src="assets/preview.jpg" width="150"> |
+
+| Profile View | Admin Dashboard |
+|--------------|-----------------|
+| <img src="assets/Profile_view.jpg" width="150"> | <img src="assets/Admin-Dashboard.jpg" width="150"> |
+
+| Admin Login | Admin Files |
+|-------------|-------------|
+| <img src="assets/Admin-Login.jpg" width="150"> | <img src="assets/Admin-Files.jpg" width="150"> |
+
+| Admin User List |  |
+|-----------------|--|
+| <img src="assets/Admin-user_list.jpg" width="150"> |  |
+
+
 ## Future Enhancements
 
 - Role-based access control for granular permissions
