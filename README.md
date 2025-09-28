@@ -13,6 +13,7 @@ NotesApp is a modern, mobile-responsive web application designed for students an
 - [Authentication & Authorization](#authentication--authorization)
 - [Database Design](#database-design)
 - [Technology Stack](#technology-stack)
+- [NotesApp Architecture Overview](#notesapp-architecture-overview)
 - [Project Structure](#project-structure)
 - [How to Run](#how-to-run)
 - [Future Enhancements](#future-enhancements)
