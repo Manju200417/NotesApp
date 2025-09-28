@@ -225,7 +225,7 @@ flowchart TD
 - **Backend:** Flask (Python)
 - **Databases:** SQLite (user info & metadata), MySQL (file storage)
 ---
-
+### NotesApp Architecture Overview
 ```mermaid
 
 flowchart TD
