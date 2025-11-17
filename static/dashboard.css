@@ -277,3 +277,130 @@
      height: 22px;
      filter: invert(100%);
  }
+
+
+ /* /////////////////////////AI ChatBoot//////////////////////////////  */
+ /* AI Chatbot Button */
+ #ai-button {
+     position: fixed;
+     bottom: 25px;
+     right: 25px;
+     background: linear-gradient(135deg, #0f172a, #1e293b);
+     color: #10b981;
+     width: 55px;
+     height: 55px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     border-radius: 50%;
+     font-size: 26px;
+     cursor: pointer;
+     box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+     border: 2px solid #10b981;
+     transition: 0.3s ease;
+ }
+
+ #ai-button:hover {
+     transform: scale(1.12);
+     box-shadow: 0 0 18px rgba(16, 185, 129, 0.9);
+ }
+
+ /* AI Chat Window */
+ #ai-container {
+     position: fixed;
+     bottom: 95px;
+     right: 25px;
+     width: 330px;
+     height: 460px;
+     background: rgba(31, 41, 55, 0.95);
+     backdrop-filter: blur(6px);
+     border-radius: 14px;
+     display: none;
+     flex-direction: column;
+     box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
+     border: 2px solid rgba(16, 185, 129, 0.4);
+     overflow: hidden;
+     animation: fadeIn 0.25s ease-in;
+ }
+
+ /* Header */
+ #ai-header {
+     background: linear-gradient(135deg, #0f172a, #1e293b);
+     color: #10b981;
+     padding: 12px;
+     font-size: 18px;
+     font-weight: 600;
+     display: flex;
+     justify-content: space-between;
+     border-bottom: 1px solid #10b981;
+ }
+
+ #ai-close {
+     cursor: pointer;
+     color: #e5e7eb;
+     font-size: 18px;
+ }
+
+ #ai-close:hover {
+     color: #ef4444;
+ }
+
+ /* Chat Messages Area */
+ #ai-messages {
+     flex: 1;
+     padding: 12px;
+     overflow-y: auto;
+     color: #e5e7eb;
+ }
+
+ /* User Message Bubble */
+ .user-msg {
+     background: #374151;
+     padding: 8px 12px;
+     margin: 6px 0;
+     border-radius: 8px;
+     align-self: flex-end;
+     max-width: 80%;
+     color: #d1d5db;
+     border-left: 3px solid #3b82f6;
+ }
+
+ /* AI Message Bubble */
+ .ai-msg {
+     background: #1f2937;
+     padding: 8px 12px;
+     margin: 6px 0;
+     border-radius: 8px;
+     max-width: 80%;
+     border-left: 3px solid #10b981;
+     color: #e5e7eb;
+ }
+
+ /* AI Input Field */
+ #ai-input {
+     border: none;
+     padding: 12px;
+     width: 100%;
+     color: #e5e7eb;
+     font-size: 14px;
+     outline: none;
+     background: #111827;
+     border-top: 2px solid #10b981;
+ }
+
+ #ai-input::placeholder {
+     color: #9ca3af;
+ }
+
+ /* Fade animation */
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0px);
+     }
+ }

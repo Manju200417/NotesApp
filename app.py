@@ -1,6 +1,7 @@
-from flask import Flask,render_template,session,request,redirect,url_for,Response
+from flask import Flask,render_template,session,request,redirect,url_for,Response,jsonify
 from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata,get_user_profile
 from mysql_db import upload_file,get_file_from_db
+from ai_chatbot import generate_ai_reply
 from auth import auth_bp
 from admin import admin_bp
 import base64
@@ -178,6 +179,21 @@ def profile():
         print(str(e))
 
     return render_template("profile.html", user=user, notes_count=notes_count)
+
+@app.route("/ai_chat", methods=["POST"])
+def ai_chat():
+    try:
+        data = request.json
+        user_msg = data.get("message", "")
+
+        reply = generate_ai_reply(user_msg)
+
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        print("AI ERROR:", e)
+        return jsonify({"reply": "Something went wrong with AI."})
+
 
 if __name__ == "__main__":
     try:

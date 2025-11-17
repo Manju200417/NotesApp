@@ -1,0 +1,250 @@
+===============================
+ NOTESAPP – AI KNOWLEDGE FILE
+===============================
+
+This file contains all information that the AI Assistant must use
+to answer questions about the NotesApp project.
+
+The assistant should ONLY answer based on:
+- This file (primary knowledge)
+- Database (files_metadata table)
+- Uploaded files list
+- README and wiki content (merged here)
+
+------------------------------------------------------------
+ 1. ABOUT NOTESAPP
+------------------------------------------------------------
+
+NotesApp is a responsive web application that helps students and
+educators upload, store, preview, manage, and download academic notes.
+
+Files are stored with detailed metadata such as:
+title, description, category, year, branch, semester, subject, and filename.
+
+NotesApp is designed for:
+- Fast searching
+- Organized retrieval
+- Secure file storage
+- Easy preview and downloads
+
+------------------------------------------------------------
+ 2. WHAT USERS CAN UPLOAD
+------------------------------------------------------------
+
+Each uploaded file contains:
+
+- Title
+- Description
+- Category: Textbook, Notes, Previous Question Paper (QP)
+- Year: 1, 2, 3
+- Branch: CSE, ECE, Mechanical, Civil, Electrical
+- Semester: 1 to 6
+- Subject
+- File (PDF, DOCX, PPT, IMG, etc.)
+
+------------------------------------------------------------
+ 3. FILE PREVIEW & DOWNLOAD
+------------------------------------------------------------
+
+Users can:
+- Preview PDF/IMG files inside the app
+- Download files for offline use
+- Search/filter files based on metadata
+
+------------------------------------------------------------
+ 4. USER DASHBOARD & PROFILE
+------------------------------------------------------------
+
+The dashboard displays:
+- Textbooks
+- Notes
+- Previous Question Papers
+- Upload button
+
+Profile page shows:
+- Username
+- Email
+- Account details
+
+------------------------------------------------------------
+ 5. TWO-DATABASE SYSTEM (IMPORTANT)
+------------------------------------------------------------
+
+NotesApp uses 2 databases for performance:
+
+1) SQLite  
+   - Users table  
+   - Files_Metadata table  
+   - Fast lookups for dashboard & search
+
+2) MySQL  
+   - Stores actual file data (LONGBLOB)
+   - Uses file_id to link files with SQLite metadata
+
+------------------------------------------------------------
+ 6. AUTHENTICATION & AUTHORIZATION
+------------------------------------------------------------
+
+- Only logged-in users can upload or download notes
+- Sessions track authenticated users
+- Middleware protects pages from unauthorized access
+- Admin can:
+  - View all users
+  - Delete uploaded files
+  - Manage note entries
+
+------------------------------------------------------------
+ 7. UPLOAD PROCESS (How Upload Works)
+------------------------------------------------------------
+
+1. User enters:
+   - Title  
+   - Description  
+   - Category  
+   - Year  
+   - Branch  
+   - Sem  
+   - Subject  
+
+2. User selects file
+
+3. Metadata is saved into SQLite
+
+4. File binary saved into MySQL under a unique file_id
+
+5. File appears in dashboard categories
+
+------------------------------------------------------------
+ 8. ***HOW TO USE NOTESAPP (IMPORTANT SECTION)***
+------------------------------------------------------------
+
+The following is the official usage guide for NotesApp.
+
+### ⭐ Using NotesApp as a Student or User
+
+1) **Create an account**
+   - Register with username, email, password
+   - Login using your credentials
+
+2) **Use the Dashboard**
+   - Dashboard shows:
+     - Textbooks
+     - Notes
+     - Previous Question Papers
+   - Click any category to browse uploaded files
+
+3) **Search and Filter**
+   - Use search box or filters:
+     - Title
+     - Branch
+     - Year
+     - Category
+     - Semester
+     - Subject
+
+4) **Preview Files**
+   - Click on a file → preview loads directly in the app
+
+5) **Download Files**
+   - Click “Download” to save the file to your device
+
+6) **Check Your Profile**
+   - View your username, email, and account info
+
+---
+
+### ⭐ Uploading Notes (For users who upload)
+
+1. Go to **Upload**
+2. Fill all required metadata:
+   - Title  
+   - Description  
+   - Category  
+   - Year  
+   - Branch  
+   - Semester  
+   - Subject  
+3. Select the file
+4. Click **Upload**
+5. The file will now appear in the category pages
+
+---
+
+### ⭐ Admin Usage
+
+1) Login via Admin Login page  
+2) Admin Dashboard shows:
+   - All users  
+   - All uploaded materials  
+3) Admin can:
+   - Delete files
+   - View user info
+
+---
+
+------------------------------------------------------------
+ 9. PROJECT STRUCTURE (Simplified)
+------------------------------------------------------------
+
+NotesApp/
+├── app.py  
+├── auth.py  
+├── admin.py  
+├── db.py  
+├── mysql_db.py  
+├── templates/  
+├── static/  
+├── README.md  
+├── wiki.md  
+└── notesapp_ai_data.txt  ← this file
+
+------------------------------------------------------------
+ 10. HIGH-LEVEL WORKFLOW
+------------------------------------------------------------
+
+User → Upload Metadata → SQLite  
+User → Upload File → MySQL  
+Download Request → Fetch from MySQL  
+Frontend → Displays Metadata from SQLite  
+
+------------------------------------------------------------
+ 11. FREQUENT QUESTIONS & HOW AI SHOULD ANSWER
+------------------------------------------------------------
+
+Q: “How it works?”  
+A: Use this file’s HOW TO USE + upload flow + DB explanation.
+
+Q: “What is NotesApp?”  
+A: Use section 1.
+
+Q: “How to upload notes?”  
+A: Use Upload section.
+
+Q: “Where files stored?”  
+A: Metadata → SQLite, File data → MySQL.
+
+Q: “List all files”  
+A: Use get_all_files() DB list.
+
+Q: “Show uploaded files”  
+A: Same.
+
+Q: “Explain categories”  
+A: Use Category explanation above.
+
+Q: “What is year/sem/branch system?”  
+A: Use metadata rules above.
+
+------------------------------------------------------------
+ 12. AI BEHAVIOR RULES
+------------------------------------------------------------
+
+- Only answer using this file + SQLite RAG
+- For app questions → always refer to this file
+- For file-related questions → use DB
+- No unrelated topics (politics, news, celebrities)
+- Keep responses clear, short, and helpful
+
+===============================
+ END OF NOTESAPP AI KNOWLEDGE
+===============================

@@ -63,6 +63,56 @@
                     src="{{ url_for('static', filename='img/inst.svg') }}" alt="Instagram"></a>
         </div>
 
+
+        <!-- /////////////////////////AI ChatBoot////////////////////////////// -->
+
+        <!-- AI Chatbot Button -->
+        <div id="ai-button">🤖</div>
+
+        <!-- AI Chat Window -->
+        <div id="ai-container">
+            <div id="ai-header">AI Assistant <span id="ai-close">✖</span></div>
+            <div id="ai-messages"></div>
+            <input type="text" id="ai-input" placeholder="Ask something..." autofocus>
+        </div>
+
+        <script src="{{ url_for('static', filename='ai.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='ai.css') }}">
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const aiBtn = document.getElementById("ai-button");
+                const aiBox = document.getElementById("ai-container");
+                const aiClose = document.getElementById("ai-close");
+                const aiInput = document.getElementById("ai-input");
+                const aiMessages = document.getElementById("ai-messages");
+
+                aiBtn.onclick = () => aiBox.style.display = "flex";
+                aiClose.onclick = () => aiBox.style.display = "none";
+
+                aiInput.addEventListener("keypress", async function (e) {
+                    if (e.key === "Enter") {
+                        let text = aiInput.value.trim();
+                        if (!text) return;
+
+                        aiMessages.innerHTML += `<div class='user-msg'>${text}</div>`;
+                        aiInput.value = "";
+
+                        const response = await fetch("/ai_chat", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ message: text })
+                        });
+
+                        let data = await response.json();
+
+                        aiMessages.innerHTML += `<div class='ai-msg'>${data.reply}</div>`;
+                        aiMessages.scrollTop = aiMessages.scrollHeight;
+                    }
+                });
+            });
+        </script>
+
 </body>
 
 </html>
