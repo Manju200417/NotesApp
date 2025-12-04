@@ -7,7 +7,10 @@
     <title>Dashboard - NotesApp</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 </head>
+<style></style>
 
 <body>
     <header>
@@ -67,51 +70,103 @@
         <!-- /////////////////////////AI ChatBoot////////////////////////////// -->
 
         <!-- AI Chatbot Button -->
-        <div id="ai-button">🤖</div>
+        <div id="ai-button"><img src="{{ url_for('static', filename='img/robot.png') }}" alt="AI"></div>
 
         <!-- AI Chat Window -->
         <div id="ai-container">
             <div id="ai-header">AI Assistant <span id="ai-close">✖</span></div>
+
             <div id="ai-messages"></div>
-            <input type="text" id="ai-input" placeholder="Ask something..." autofocus>
+
+            <div id="ai-input-container">
+                <input type="text" id="ai-input" placeholder="Ask something..." autofocus>
+                <button id="ai-send">➤</button>
+            </div>
         </div>
 
-        <script src="{{ url_for('static', filename='ai.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='ai.css') }}">
 
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const aiBtn = document.getElementById("ai-button");
-                const aiBox = document.getElementById("ai-container");
-                const aiClose = document.getElementById("ai-close");
-                const aiInput = document.getElementById("ai-input");
-                const aiMessages = document.getElementById("ai-messages");
 
-                aiBtn.onclick = () => aiBox.style.display = "flex";
-                aiClose.onclick = () => aiBox.style.display = "none";
+    </div>
+    <script>
 
-                aiInput.addEventListener("keypress", async function (e) {
-                    if (e.key === "Enter") {
-                        let text = aiInput.value.trim();
-                        if (!text) return;
+        document.addEventListener("DOMContentLoaded", () => {
+            const aiBtn = document.getElementById("ai-button");
+            const aiBox = document.getElementById("ai-container");
+            const aiClose = document.getElementById("ai-close");
+            const aiInput = document.getElementById("ai-input");
+            const aiSend = document.getElementById("ai-send");
+            const aiMessages = document.getElementById("ai-messages");
 
-                        aiMessages.innerHTML += `<div class='user-msg'>${text}</div>`;
-                        aiInput.value = "";
+            // Open / Close
+            aiBtn.onclick = () => aiBox.style.display = "flex";
+            aiClose.onclick = () => aiBox.style.display = "none";
 
-                        const response = await fetch("/ai_chat", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ message: text })
-                        });
+            // Smooth scrolling
+            function smoothScroll() {
+                setTimeout(() => {
+                    aiMessages.scrollTo({
+                        top: aiMessages.scrollHeight,
+                        behavior: "smooth"
+                    });
+                }, 50);
+            }
 
-                        let data = await response.json();
+            // Add user message
+            function addUserMessage(text) {
+                aiMessages.innerHTML += `<div class="user-msg">${text}</div>`;
+                smoothScroll();
+            }
 
-                        aiMessages.innerHTML += `<div class='ai-msg'>${data.reply}</div>`;
-                        aiMessages.scrollTop = aiMessages.scrollHeight;
+            // Typing animation with markdown
+            function addAIMessage(markdownText) {
+                const bubble = document.createElement("div");
+                bubble.className = "ai-msg";
+                aiMessages.appendChild(bubble);
+
+                // Convert markdown → HTML
+                const html = marked.parse(markdownText);
+                const words = html.split(" ");
+
+                let i = 0;
+                function type() {
+                    if (i < words.length) {
+                        bubble.innerHTML += words[i] + " ";
+                        i++;
+                        smoothScroll();
+                        setTimeout(type, 25);
                     }
+                }
+                type();
+            }
+
+            // Send message
+            async function sendMessage() {
+                let msg = aiInput.value.trim();
+                if (!msg) return;
+
+                addUserMessage(msg);
+                aiInput.value = "";
+
+                const res = await fetch("/ai_chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: msg })
                 });
+
+                const data = await res.json();
+                addAIMessage(data.reply);
+            }
+
+            // Send button
+            aiSend.onclick = sendMessage;
+
+            // Enter key
+            aiInput.addEventListener("keypress", e => {
+                if (e.key === "Enter") sendMessage();
             });
-        </script>
+        });
+
+    </script>
 
 </body>
 

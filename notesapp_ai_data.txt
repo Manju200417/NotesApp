@@ -1,5 +1,5 @@
 ===============================
- NOTESAPP – AI KNOWLEDGE FILE
+ NOTESAPP – AI KNOWLEDGE FILE   ---By Manjunath Alagawadi
 ===============================
 
 This file contains all information that the AI Assistant must use
