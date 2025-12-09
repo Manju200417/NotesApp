@@ -1,6 +1,5 @@
 # NotesApp
-
-NotesApp is a modern, mobile-responsive web application designed for students and educators to efficiently upload, manage, preview, and download academic notes. The app provides a structured system for storing files with detailed metadata, enabling fast and convenient search and retrieval of notes across devces.
+NotesApp is a modern, mobile-responsive web application designed for students and educators to efficiently upload, manage, preview, and download academic notes. The app provides a structured system for storing files with detailed metadata, enabling fast and convenient search and retrieval of notes across devices. Integrated AI assistance, powered by Groq API, offers users real-time support, project information, and step-by-step guidance directly within the application.
 
 ---
 
@@ -11,11 +10,13 @@ NotesApp is a modern, mobile-responsive web application designed for students an
 - [Low-Level Design](#low-level-design-lld)
 - [User Functionality](#user-functionality)
 - [Authentication & Authorization](#authentication--authorization)
+- [AI Chatbot](#ai-chatbot)
 - [Database Design](#database-design)
 - [Technology Stack](#technology-stack)
 - [NotesApp Architecture Overview](#notesapp-architecture-overview)
 - [Project Structure](#project-structure)
 - [How to Run](#how-to-run)
+- [Screenshots](#screenshots)
 - [Future Enhancements](#future-enhancements)
 
 ---
@@ -41,6 +42,14 @@ NotesApp is a modern, mobile-responsive web application designed for students an
 
 - **Search & Filter:**  
   Easily search and filter notes by title, branch, year, category, semester, or subject.
+
+- **AI-Powered Chatbot:**
+  Integrated intelligent assistant powered by Groq API that helps users:
+
+  Get information about the NotesApp project
+  Receive step-by-step instructions for using features
+  List and explore all available files in the project
+  Answer queries about notes, uploads, and navigation
 
 - **Admin Features:**
   - View all registered users
@@ -147,6 +156,48 @@ User → Frontend → Backend → Database → Backend → Frontend → User
 - Admins have privileged access to manage users and files.
 - Middleware ensures restricted access to protected pages.
 - Public pages include Login, Register, Admin Login, and a limited Dashboard view.
+
+---
+
+## AI Chatbot
+
+### Overview
+
+The NotesApp integrates an intelligent AI-powered chatbot built with **Groq API**, providing users with instant assistance and project information directly from the application.
+
+### Features
+
+The AI Chatbot helps users by:
+
+- **Project Information:** Get detailed information about the NotesApp project, its features, and capabilities
+- **Usage Instructions:** Receive step-by-step instructions on how to use various features of the application
+- **File Listing:** List and explore all available files within the project structure
+- **Navigation Help:** Get guidance on navigating through different sections of the app
+- **Query Answering:** Answer user questions about notes, uploads, downloads, and general app functionality
+
+### Technology
+
+- **AI Model:** Groq API (High-performance language model)
+- **Integration:** Seamlessly integrated into the user dashboard
+- **Availability:** Available to all authenticated users
+- **Real-time Responses:** Instant answers powered by advanced AI capabilities
+
+### How It Works
+
+1. User opens the chatbot interface from the dashboard
+2. User types a query or question
+3. Query is sent to the Groq API backend service
+4. AI processes the request and generates contextual responses
+5. Response is displayed to the user in real-time
+
+### Example Queries
+
+- *"What is NotesApp?"*
+- *"How do I upload a file?"*
+- *"List all files in the project"*
+- *"How can I download notes?"*
+- *"What are the features of this app?"*
+- *"Show me the project structure"*
 
 ---
 
@@ -265,6 +316,7 @@ NotesApp/
 ├── app.py                  # Main Flask application & routing
 ├── auth.py                 # Authentication blueprint (login, register, logout)
 ├── admin.py                # Admin blueprint for user/file management
+├── ai_chatbot.py           # Groq Chatbot with RAG
 ├── db.py                   # SQLite database connection & helpers
 ├── mysql_db.py             # MySQL connection for file storage
 ├── templates/              # HTML templates
@@ -317,7 +369,7 @@ NotesApp/
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 | Login | Sign In |
 |-------|---------|
@@ -354,4 +406,3 @@ NotesApp/
 ---
 
 Enjoy seamless note management with NotesApp!
-

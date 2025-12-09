@@ -5,20 +5,15 @@ from flask import Blueprint, request, jsonify
 
 load_dotenv()
 
-# ================== GROQ CLIENT SETUP ==================
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 try:
     from groq import Groq
     client = Groq(api_key=GROQ_API_KEY)
-    print("✅ Groq client initialized")
-except Exception as e:
-    print(f"❌ Groq initialization failed: {e}")
+except Exception:
     client = None
 
-# ================== FLASK BLUEPRINT ==================
 ai_bp = Blueprint('ai', __name__)
-
 
 @ai_bp.route('/ai_chat', methods=['POST'])
 def ai_chat():
@@ -32,36 +27,23 @@ def ai_chat():
         reply = generate_ai_reply(user_message)
         return jsonify({"reply": reply})
     
-    except Exception as e:
-        print(f"❌ AI Chat Route Error: {e}")
+    except Exception:
         return jsonify({"reply": "Sorry, something went wrong!"})
 
 
-# ================== LOAD PROJECT KNOWLEDGE ==================
-
 def load_project_knowledge():
-    """Load notesapp_ai_data.txt for project-related info"""
     try:
         if os.path.exists("notesapp_ai_data.txt"):
             with open("notesapp_ai_data.txt", "r", encoding="utf-8") as f:
-                content = f.read()
-                print(f"✅ Loaded notesapp_ai_data.txt ({len(content)} chars)")
-                return content
+                return f.read()
         else:
-            print("⚠️ notesapp_ai_data.txt not found")
             return ""
-    except Exception as e:
-        print(f"❌ Error loading knowledge file: {e}")
+    except Exception:
         return ""
 
-# Load once at startup
 PROJECT_KNOWLEDGE = load_project_knowledge()
 
-
-# ================== DATABASE FUNCTIONS ==================
-
 def search_notes(query):
-    """Search files in database"""
     try:
         conn = sqlite3.connect("notesapp.db")
         cur = conn.cursor()
@@ -81,13 +63,11 @@ def search_notes(query):
         conn.close()
         return results
 
-    except Exception as e:
-        print(f"❌ DB Search Error: {e}")
+    except Exception:
         return []
 
 
 def get_all_files():
-    """Get all files from database"""
     try:
         conn = sqlite3.connect("notesapp.db")
         cur = conn.cursor()
@@ -108,13 +88,11 @@ def get_all_files():
             out += f"**{i}. {title}**\n   📖 Subject: {subject}\n   📁 `{filename}`\n\n"
         return out.strip()
 
-    except Exception as e:
-        print(f"❌ DB Error: {e}")
+    except Exception:
         return "❌ Unable to fetch files."
 
 
 def get_all_subjects():
-    """Get unique subjects from database"""
     try:
         conn = sqlite3.connect("notesapp.db")
         cur = conn.cursor()
@@ -127,7 +105,6 @@ def get_all_subjects():
 
 
 def get_file_count():
-    """Get total file count"""
     try:
         conn = sqlite3.connect("notesapp.db")
         cur = conn.cursor()
@@ -140,7 +117,6 @@ def get_file_count():
 
 
 def format_search_results(results):
-    """Format database results"""
     if not results:
         return None
     
@@ -155,40 +131,22 @@ def format_search_results(results):
     return out.strip()
 
 
-# ================== DETECT QUESTION TYPE ==================
-
 def is_project_question(msg):
-    """Check if user is asking about the app/project itself"""
     project_keywords = [
-        # About the app
         "what is notesapp", "about notesapp", "about this app", "what is this",
         "how does this work", "how it works", "how this works",
-        
-        # Features
         "features", "what can i do", "functionality", "capabilities",
-        
-        # Technical
         "who made", "who created", "who built", "developer", "built by",
         "technology", "tech stack", "made with", "built with",
-        
-        # App usage
         "how to use", "how do i use", "using this app", "guide",
-        
-        # Categories
         "what categories", "types of files", "file types", "what types",
-        
-        # Login/Register
         "how to login", "how to register", "signup", "sign up", "create account",
-        
-        # Purpose
         "why notesapp", "purpose", "goal", "what for", "benefits"
     ]
     
     return any(keyword in msg for keyword in project_keywords)
 
-
 def is_file_search(msg):
-    """Check if user is searching for files/notes"""
     search_keywords = [
         "find", "search", "get", "show", "have", "any",
         "is there", "do you have", "looking for", "need",
@@ -201,15 +159,9 @@ def is_file_search(msg):
     return any(keyword in msg for keyword in search_keywords)
 
 
-# ================== MAIN AI FUNCTION ==================
-
 def generate_ai_reply(user_msg):
-    """Generate response based on question type"""
-    
     msg = user_msg.lower().strip()
-    
-    # ============ 1. SIMPLE GREETINGS ============
-    
+        
     if msg in ["hi", "hello", "hey", "hii", "hola", "namaste"]:
         file_count = get_file_count()
         return f"Hello! 👋 Welcome to NotesApp!\n\n📊 We have **{file_count} files** uploaded.\n\nHow can I help you?\n- 🔍 Search for notes\n- 📚 Show all files\n- ❓ Ask about the app"
@@ -222,22 +174,16 @@ def generate_ai_reply(user_msg):
 
     if msg in ["ok", "okay", "k", "fine", "alright"]:
         return "👍 Let me know if you need anything else!"
-
-    # ============ 2. SHOW ALL FILES ============
     
     file_keywords = ["show files", "list files", "all files", "show all", 
                      "uploaded files", "available files", "what files"]
     if any(k in msg for k in file_keywords):
         return get_all_files()
-
-    # ============ 3. FILE COUNT ============
     
     count_keywords = ["how many files", "total files", "file count", "number of files"]
     if any(k in msg for k in count_keywords):
         count = get_file_count()
         return f"📊 There are **{count} files** currently uploaded in NotesApp!"
-
-    # ============ 4. SHOW SUBJECTS ============
     
     subject_keywords = ["what subjects", "which subjects", "available subjects", "list subjects"]
     if any(k in msg for k in subject_keywords):
@@ -247,49 +193,39 @@ def generate_ai_reply(user_msg):
             return f"📖 **Available Subjects:**\n\n{subject_list}"
         else:
             return "📭 No subjects found yet. Upload some files to get started!"
-
-    # ============ 5. HELP COMMAND ============
     
     if msg in ["help", "?", "commands"]:
         return """🤖 **NotesApp AI Assistant**
 
 **I can help with:**
 
-🔍 **Search Files:** "Find physics notes"
-📚 **Browse:** "Show all files"
-📖 **Subjects:** "What subjects available?"
-📊 **Stats:** "How many files?"
-📤 **Upload:** "How to upload?"
-ℹ️ **About App:** "What is NotesApp?"
-
-**Just ask anything!** 😊"""
-
-    # ============ 6. UPLOAD INSTRUCTIONS ============
+ **Search Files:** "Find physics notes"
+ **Browse:** "Show all files"
+ **Subjects:** "What subjects available?"
+ **Stats:** "How many files?"
+ **Upload:** "How to upload?"
+ **About App:** "What is NotesApp?"
+ **Just ask anything!** 😊"""
     
     upload_keywords = ["how to upload", "upload file", "upload steps", 
                        "how can i upload", "uploading", "add file"]
     if any(k in msg for k in upload_keywords):
         return """📤 **How to Upload Files:**
 
-1️⃣ Click **"Upload"** in the navigation bar
-2️⃣ Fill in the details:
-   • Title of your file
-   • Subject name
-   • Description
-3️⃣ Select your file (PDF, DOC, etc.)
-4️⃣ Choose category (Notes/Textbook/Question Paper)
-5️⃣ Click **"Upload"** button
+ Click **"Upload"** in the navigation bar
+ Fill in the details:
+  • Title of your file
+  • Subject name
+  • Description
+ Select your file (PDF, DOC, etc.)
+ Choose category (Notes/Textbook/Question Paper)
+ Click **"Upload"** button
 
-✅ Done! Your file will help other students! 🎉"""
+ Done! Your file will help other students! 🎉"""
 
-    # ============ 7. PROJECT-RELATED QUESTIONS ============
-    
     if is_project_question(msg):
         return ask_ai_with_project_knowledge(user_msg)
 
-    # ============ 8. FILE SEARCH IN DATABASE ============
-    
-    # Clean search terms
     remove_words = ["find", "search", "get", "show", "have", "any", "is", 
                     "there", "do", "you", "the", "a", "an", "for", "on",
                     "in", "this", "notesapp", "app", "please", "can", 
@@ -300,7 +236,6 @@ def generate_ai_reply(user_msg):
         search_terms = search_terms.replace(word, " ")
     search_terms = " ".join(search_terms.split()).strip()
     
-    # Search database
     if search_terms:
         results = search_notes(search_terms)
         
@@ -315,22 +250,15 @@ def generate_ai_reply(user_msg):
             else:
                 return f"❌ **No files found for '{search_terms}'**\n\n📭 Database is empty. Be the first to upload!"
     
-    # Try original message
     results = search_notes(user_msg)
     if results:
         formatted = format_search_results(results)
         return formatted + "\n\n💡 *Click on the file to view or download!*"
 
-    # ============ 9. GENERAL AI WITH BOTH CONTEXTS ============
-    
     return ask_ai_with_full_context(user_msg)
 
 
-# ================== AI WITH PROJECT KNOWLEDGE ==================
-
 def ask_ai_with_project_knowledge(user_msg):
-    """Use AI with notesapp_ai_data.txt for project questions"""
-    
     if client is None:
         return "🤖 I can help you learn about NotesApp!\n\n📤 Upload & share notes\n📚 Browse textbooks\n📄 Find question papers"
 
@@ -363,21 +291,15 @@ DO NOT make up features or information not in the project data."""
         
         return response.choices[0].message.content
     
-    except Exception as e:
-        print(f"❌ AI Error: {e}")
+    except Exception:
         return "ℹ️ **About NotesApp:**\n\nNotesApp helps students share and access study materials like notes, textbooks, and question papers.\n\n📤 Upload your files\n📚 Browse materials\n🔍 Search by subject"
 
 
-# ================== AI WITH FULL CONTEXT ==================
-
 def ask_ai_with_full_context(user_msg):
-    """Use AI with both project knowledge and database info"""
-    
     if client is None:
         return "🔍 Try:\n- 'Show all files'\n- 'Find [subject] notes'\n- 'What is NotesApp?'"
 
     try:
-        # Get database context
         file_count = get_file_count()
         subjects = get_all_subjects()
         subject_list = ", ".join(subjects) if subjects else "No subjects yet"
@@ -430,6 +352,5 @@ Response: [Answer from PROJECT INFORMATION]"""
         
         return response.choices[0].message.content
     
-    except Exception as e:
-        print(f"❌ AI Error: {e}")
+    except Exception:
         return "🔍 How can I help?\n\n- 'Show all files'\n- 'Find [subject] notes'\n- 'What is NotesApp?'"
