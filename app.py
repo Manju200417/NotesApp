@@ -6,11 +6,12 @@ from ai_chatbot import generate_ai_reply
 from auth import auth_bp
 from admin import admin_bp
 import base64
+import os
 
 # -----------------------------------------------------
 
 app = Flask(__name__)
-app.secret_key = "qw3ia76ew78ystdnicfnsemo89qw3u095r39827wo8y&^$&ruTIYWO7839YNE4987"
+app.secret_key = os.environ.get("SECRET_KEY")
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
@@ -211,7 +212,7 @@ def ai_chat():
 
 if __name__ == "__main__":
     try:
-        app.run(port=5000,debug=True)
+        app.run()
         # app.run(port=5000)
         
     except Exception as e:
