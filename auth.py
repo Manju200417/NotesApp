@@ -1,8 +1,9 @@
 from flask import Blueprint,render_template,request,session,redirect,url_for
-from db import create_user_table,insert_user,check_login
+# from db import create_user_table,insert_user,check_login
+import db
 
 auth_bp = Blueprint('auth', __name__,url_prefix='/auth')
-create_user_table()
+db.create_user_table()
 
 @auth_bp.route('/login',methods=['GET', 'POST'])
 def login():
@@ -11,7 +12,7 @@ def login():
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
-            user = check_login(username,password)
+            user = db.check_login(username,password)
 
             if not user:
                 err = "Invalid username or password!"
@@ -47,7 +48,7 @@ def register():
                 err = "Passwords do not match!"
             
             else :
-                user_id = insert_user(user)
+                user_id = db.insert_user(user)
                 session['user_id'] = user_id
                 session["username"] = user['username']
                 session['name'] = user["name"]
