@@ -1,5 +1,6 @@
 from flask import Flask,render_template,session,request,redirect,url_for,Response,jsonify
-from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata,get_user_profile
+# from db import insert_file_metadata,create_files_table,insert_file_metadata,get_all_files_metadata,get_user_profile
+import db
 from mysql_db import upload_file,get_file_from_db
 from ai_chatbot import generate_ai_reply
 from auth import auth_bp
@@ -14,7 +15,7 @@ app.secret_key = "qw3ia76ew78ystdnicfnsemo89qw3u095r39827wo8y&^$&ruTIYWO7839YNE4
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
 
-create_files_table()
+db.create_files_table()
 
 # ------------- Middleware ---------------
 @app.before_request
@@ -57,7 +58,7 @@ def upload():
                     "file_id": res.get('id')
                 }
 
-                insert_file_metadata(file_data)
+                db.insert_file_metadata(file_data)
                 session['msg'] = f"File uploaded! {res.get('filename')}"
                 return redirect(url_for("upload"))
             
@@ -72,8 +73,13 @@ def upload():
 @app.route('/textbooks',methods=['GET', 'POST'])
 def textbooks():
     err = ''
+    query = request.args.get('query')
     try:
-        all_notes = get_all_files_metadata("textbook") 
+        if query:
+            all_notes = db.get_searched_files("textbook", query)
+
+        else : all_notes = db.get_all_files_metadata("textbook") 
+        
         if not all_notes:
             err = "No Textbook's Are Available"
     except Exception as e:
@@ -84,8 +90,12 @@ def textbooks():
 @app.route('/notes',methods=['GET', 'POST'])
 def notes():
     err = ''
+    query = request.args.get('query')
     try:
-        all_notes = get_all_files_metadata("notes") 
+        if query:
+            all_notes = db.get_searched_files("notes", query)
+
+        else : all_notes = db.get_all_files_metadata("notes") 
         if not all_notes:
             err = "No Note's Are Available"
             
@@ -98,8 +108,12 @@ def notes():
 @app.route('/qp',methods=['GET', 'POST'])
 def qp():
     err = ''
+    query = request.args.get('query')
     try:
-        all_notes = get_all_files_metadata("previous_qp") 
+        if query:
+            all_notes = db.get_searched_files("previous_qp", query)
+
+        else : all_notes = db.get_all_files_metadata("previous_qp") 
         if not all_notes:
             err = "No Qustion Paper's Are Available"
 
@@ -170,7 +184,7 @@ def profile():
         if "user_id" not in session:
             return redirect(url_for("auth.login"))
         
-        user, notes_count = get_user_profile(session["user_id"])
+        user, notes_count = db.get_user_profile(session["user_id"])
 
         if not user:
             return "User not found"

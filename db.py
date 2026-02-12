@@ -107,6 +107,30 @@ def get_all_files_metadata(type):
     rows = c.fetchall()
     conn.close()
     return rows
+
+# for search
+def get_searched_files(file_type, query):
+    conn = sqlite3.connect("notesapp.db")
+    c = conn.cursor()
+
+    like_query = f"%{query}%"
+
+    c.execute("""
+        SELECT title, subject, uploaded_by, description, file_id
+        FROM files_metadata
+        WHERE category = ?
+        AND (
+            title LIKE ?
+            OR subject LIKE ?
+            OR description LIKE ?
+        )
+        ORDER BY uploaded_at DESC
+    """, (file_type, like_query, like_query, like_query))
+
+    rows = c.fetchall()
+    conn.close()
+    return rows
+
 # ------------------------------------------user_profile----------------------------------------------------------------
 
 def get_user_profile(user_id):
