@@ -89,7 +89,7 @@ def get_all_files():
         return out.strip()
 
     except Exception:
-        return "❌ Unable to fetch files."
+        return "Unable to fetch files."
 
 
 def get_all_subjects():
